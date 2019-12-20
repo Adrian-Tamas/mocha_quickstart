@@ -12,7 +12,9 @@
   "dependencies": {
     "axios": "^0.19.0",
     "chai": "^4.2.0",
+    "chai-exclude": "^2.0.2",
     "chromedriver": "^79.0.0",
+    "dateformat": "^3.0.3",
     "faker": "^4.1.0",
     "geckodriver": "^1.19.1",
     "mocha": "^6.2.2",

@@ -1,11 +1,11 @@
 const request = require("axios").default;
 
-module.exports = function apiPost({url, payload, headers=undefined} = {}) {
+module.exports = function apiPut({url, payload, headers=undefined} = {}) {
     let config = {};
     if (headers !== undefined) {
         config.headers = headers;
     }
-    return request.post(url, payload, config)
+    return request.put(url, payload, config)
         .then((response)=> {
             return {
                 status_code: response.status,

@@ -1,11 +1,11 @@
 const request = require("axios").default;
 
-module.exports = function apiPost({url, payload, headers=undefined} = {}) {
+module.exports = function apiDelete({url, headers=undefined} = {}) {
     let config = {};
     if (headers !== undefined) {
         config.headers = headers;
     }
-    return request.post(url, payload, config)
+    return request.delete(url, config)
         .then((response)=> {
             return {
                 status_code: response.status,
