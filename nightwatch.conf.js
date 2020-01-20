@@ -46,6 +46,7 @@ module.exports = {
                 acceptSslCerts: true,
                 marionette:true,
                 acceptInsecureCerts: true,
+                elementScrollBehavior: 1,
                 firefoxOptions: {
                     args: [
                         // '-headless',
