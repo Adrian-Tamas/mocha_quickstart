@@ -3,3 +3,4 @@ chromedriver.log
 selenium-server.log
 tests_output
 .idea
+geckodriver.log

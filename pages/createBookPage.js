@@ -1,34 +1,16 @@
 const commands = {
-    updateBookInfo: function(book_details, confirm_edit=true) {
+    createBook: function(book_details, confirm=true) {
         let page = this;
-        page.clearValue("@bookName");
         page.setValue("@bookName", book_details.name);
-        page.clearValue("@bookAuthor");
         page.setValue("@bookAuthor", book_details.author);
-        page.clearValue("@bookDescription");
         page.setValue("@bookDescription", book_details.description);
-        page.clearValue("@bookCover");
         page.setValue("@bookCover", book_details.cover);
-        if(confirm_edit) {
-            page.click("@editBookButton");
+        if(confirm) {
+            page.click("@createBookButton");
             return page.api.page.viewAllBooksPage();
         } else {
             return page
         }
-    },
-
-    removeDescription: function () {
-        let page = this;
-        page.clearValue("@bookDescription");
-        page.click("@editBookButton");
-        return page.api.page.viewAllBooksPage();
-    },
-
-    removeCoverLink: function () {
-        let page = this;
-        page.clearValue("@bookCover");
-        page.click("@editBookButton");
-        return page.api.page.viewAllBooksPage();
     },
 
     isNameARequiredField: function (callback) {
@@ -49,25 +31,40 @@ const commands = {
         return page;
     },
 
-    cancelEdit: function () {
+    getFieldErrorMessage: function (callback) {
+        const page = this;
+        page.getText(".invalid-feedback", callback);
+        return page;
+    },
+
+    cancelCreate: function () {
         const page = this;
         page.click("@cancelBookButton");
         return page.api.page.viewAllBooksPage();
+    },
+
+    tryAndConfirmCreate: function ({expected_result} = {}) {
+        const page = this;
+        page.click("@createBookButton");
+        if (expected_result) {
+            return page.api.page.viewAllBooksPage();
+        } else {
+            return this;
+        }
     }
 };
 
 module.exports = {
     commands: [commands],
     url: function () {
-        return global.ui_url + `/books/:book_id`;
+        return global.ui_url + `/books/create`;
     },
     elements: {
-        bookId: '#id',
         bookName: '#name',
         bookAuthor: '#author',
         bookDescription: '#description',
         bookCover: '#cover',
-        editBookButton: '#save',
+        createBookButton: '#save',
         cancelBookButton: '#back',
         message: '.alert',
     }

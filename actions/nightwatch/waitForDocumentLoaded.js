@@ -1,22 +1,20 @@
 const events = require("events");
 
 /**
- *The waitForCondition command receives a condition to check for,
- * waits for a maximum time before timing out, and polls at a specified time interval.
- * The condition returns either as a success or a timeout.
+ * This custom command allows us to wait until the page is fully loaded. It checks document.readyState
+ * every 100ms until its value is "complete" or the timeout is reached.
+ * Nightwatch uses the Node.js EventEmitter pattern to handle asynchronous code so this command is also an EventEmitter.
  *
  * h3 Examples:
  *
- *     browser.waitForCondition('return $.active === 0;', 8000);
- *     browser.waitForCondition('return $.active; === 0;', 8000, "my custom message");
+ *     browser.waitForDocumentLoaded();
+ *     browser.waitForDocumentLoaded(5000, 'Document fully loaded!');
  *
- * @param {function} [condition] - the condition to check
  * @param {Integer} [timeoutInMilliseconds] - timeout of this wait commands in milliseconds
  * @param {String} [message] - message to display
  */
 
-class WaitForCondition extends events.EventEmitter {
-
+class WaitForDocumentLoaded extends events.EventEmitter {
     constructor() {
         super();
         this.timeoutRetryInMilliseconds = this.api.globals.waitForConditionPollInterval || 100;
@@ -24,8 +22,7 @@ class WaitForCondition extends events.EventEmitter {
         this.startTimeInMilliseconds = null;
     }
 
-    command(condition, timeoutInMilliseconds, message) {
-        this.condition = condition;
+    command(timeoutInMilliseconds, message) {
         this.startTimeInMilliseconds = new Date().getTime();
 
         if (typeof timeoutInMilliseconds !== 'number') {
@@ -37,34 +34,37 @@ class WaitForCondition extends events.EventEmitter {
             return;
         }
 
-        this.check((condition, loadedTimeInMilliseconds, conditionResult) => {
+        this.check((pageLoaded, loadedTimeInMilliseconds, readyState) => {
             let messageToShow;
             if (message) {
                 messageToShow = message;
-            } else if (conditionResult) {
-                messageToShow = `Condition was satisfied after ${loadedTimeInMilliseconds - this.startTimeInMilliseconds} ms.`;
+            } else if (pageLoaded) {
+                messageToShow = `waitForDocumentLoaded: document fully loaded after ${loadedTimeInMilliseconds - this.startTimeInMilliseconds} ms.`;
             } else {
-                messageToShow = `Timed out while waiting for condition after ${timeoutInMilliseconds} ms.`;
+                messageToShow = `waitForDocumentLoaded: document not loaded after ${timeoutInMilliseconds} ms.`;
             }
-            this.client.api.assert.equal(true, conditionResult, messageToShow);
+
+            this.client.api.assert.equal("complete", readyState, messageToShow);
             return this.emit('complete');
         }, timeoutInMilliseconds);
     }
 
     check(callback, maxTimeInMilliseconds) {
-        return this.api.execute(this.condition, [], (result) => {
+        return this.api.execute(function () {
+            return document.readyState;
+        }, [], result => {
             let now = new Date().getTime();
-            if (result.value === true) {
-                return callback(this.condition, now, result.value);
+            if (result.value === 'complete') {
+                return callback(true, now, result.value);
             } else if (now - this.startTimeInMilliseconds < maxTimeInMilliseconds) {
                 return setTimeout(() => {
                     this.check(callback, maxTimeInMilliseconds);
                 }, this.timeoutRetryInMilliseconds);
             } else {
-                return callback(this.condition, now, result.value);
+                return callback(false, now, result.value);
             }
         });
     }
 }
 
-module.exports = WaitForCondition;
+module.exports = WaitForDocumentLoaded;
