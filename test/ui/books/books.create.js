@@ -12,7 +12,6 @@ const chaiExclude = require('chai-exclude');
 const expect =  chai.expect;
 const faker = require("faker");
 
-const api_get = require("../../../actions/backend/api_get");
 const api_post = require("../../../actions/backend/api_post");
 const api_delete = require("../../../actions/backend/api_delete");
 
