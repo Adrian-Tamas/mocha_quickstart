@@ -17,14 +17,13 @@ const api_delete = require("../../../actions/backend/api_delete");
 
 chai.use(chaiExclude);
 
-describe('View user details', function () {
+describe('View users', function () {
     this.timeout(60000);
     let user_resp;
     let user_payload;
     let created_users = [];
 
     before(async () => {
-        await startWebDriver({env: process.env.NIGHTWATCH_ENV || 'firefox'});
         await createSession({env: process.env.NIGHTWATCH_ENV || 'firefox'});
         let url = global.backend_url + "/users";
         user_payload = user();
@@ -34,7 +33,6 @@ describe('View user details', function () {
 
     after(async () => {
         await closeSession();
-        await stopWebDriver();
         for (const entry of created_users) {
             let url = global.backend_url + `/users/${entry}`;
             await api_delete({url: url});

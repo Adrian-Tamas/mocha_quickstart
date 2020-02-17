@@ -21,13 +21,11 @@ describe('Create user', function () {
     let created_users = [];
 
     before(async () => {
-        await startWebDriver({env: process.env.NIGHTWATCH_ENV || 'firefox'});
         await createSession({env: process.env.NIGHTWATCH_ENV || 'firefox'});
     });
 
     after(async () => {
         await closeSession();
-        await stopWebDriver();
         for (const entry of created_users) {
             let url = global.backend_url + `/users/${entry}`;
             await api_delete({url: url});

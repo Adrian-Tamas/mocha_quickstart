@@ -13,6 +13,7 @@ const expect =  chai.expect;
 
 const api_get = require("../../../actions/backend/api_get");
 const api_post = require("../../../actions/backend/api_post");
+const api_delete = require("../../../actions/backend/api_delete");
 
 chai.use(chaiExclude);
 
@@ -21,13 +22,11 @@ describe('View all books page', function () {
     let created_books = [];
 
     before(async () => {
-        await startWebDriver({ env: process.env.NIGHTWATCH_ENV || 'firefox' });
         await createSession({ env: process.env.NIGHTWATCH_ENV || 'firefox' });
     });
 
     after(async () => {
         await closeSession();
-        await stopWebDriver();
         for (const entry of created_books) {
             let url = global.backend_url + `/books/${entry}`;
             await api_delete({url: url});

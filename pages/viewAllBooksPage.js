@@ -37,8 +37,9 @@ const commands = {
         return page;
     },
 
-    openBookDetails: function (id) {
+    openBookDetails: async function (id) {
         const page = this;
+        await page.api.execute("$('#viewBookDetails').removeClass('fade')");
         page.api.jqueryClick(`.clickable-row[data-id="${id}"]`);
         page.section.menu
             .click("@viewDetails");

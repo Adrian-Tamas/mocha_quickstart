@@ -23,8 +23,10 @@ describe('Delete user', function () {
     let created_users = [];
 
     before(async () => {
-        await startWebDriver({ env: process.env.NIGHTWATCH_ENV || 'firefox' });
         await createSession({ env: process.env.NIGHTWATCH_ENV || 'firefox' });
+    });
+
+    beforeEach(async () => {
         let url = global.backend_url + "/users";
         user_payload = user();
         user_resp = await api_post({url: url, payload: user_payload});
@@ -33,7 +35,6 @@ describe('Delete user', function () {
 
     after(async () => {
         await closeSession();
-        await stopWebDriver();
         for (const entry of created_users) {
             let url = global.backend_url + `/users/${entry}`;
             await api_delete({url: url});
@@ -91,7 +92,7 @@ describe('Delete user', function () {
                 });
         });
 
-        it.only('when the delete user modal is closed', async function () {
+        it('when the delete user modal is closed', async function () {
             const users_page = client.page.viewAllUsersPage();
             await users_page
                 .navigate()

@@ -22,13 +22,11 @@ describe('View book details modal', function () {
 
     this.timeout(60000);
     before(async () => {
-        await startWebDriver({env: process.env.NIGHTWATCH_ENV || 'firefox'});
         await createSession({env: process.env.NIGHTWATCH_ENV || 'firefox'});
     });
 
     after(async () => {
         await closeSession();
-        await stopWebDriver();
         for (const entry of created_books) {
             let url = global.backend_url + `/books/${entry}`;
             await api_delete({url: url});

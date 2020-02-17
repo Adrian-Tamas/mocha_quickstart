@@ -23,13 +23,11 @@ describe('Edit books', function () {
 
     this.timeout(60000);
     before(async () => {
-        await startWebDriver({env: process.env.NIGHTWATCH_ENV || 'firefox'});
         await createSession({env: process.env.NIGHTWATCH_ENV || 'firefox'});
     });
 
     after(async () => {
         await closeSession();
-        await stopWebDriver();
         for (const entry of created_books) {
             let url = global.backend_url + `/books/${entry}`;
             await api_delete({url: url});
@@ -50,10 +48,10 @@ describe('Edit books', function () {
                 .search(book_resp.data.name)
                 .startBookEdit(book_resp.data.id);
             books_page = edit_book_page.updateBookInfo(books_payload);
-            books_page.getFlashMessageText((result) => {
+            await books_page.getFlashMessageText((result) => {
                 expect(result.value).to.equal(`Book '${books_payload.name}' was successfully saved`);
             });
-            books_page.search(book_resp.data.name)
+            await books_page.search(book_resp.data.name)
                 .openBookDetails(book_resp.data.id);
             await books_page
                 .section
@@ -84,10 +82,10 @@ describe('Edit books', function () {
                 .search(book_resp.data.name)
                 .startBookEdit(book_resp.data.id);
             books_page = edit_book_page.updateBookInfo(books_payload);
-            books_page.getFlashMessageText((result) => {
+            await books_page.getFlashMessageText((result) => {
                 expect(result.value).to.equal(`Book '${books_payload.name}' was successfully saved`);
             });
-            books_page.search(book_resp.data.name)
+            await books_page.search(book_resp.data.name)
                 .openBookDetails(book_resp.data.id);
             await books_page
                 .section
@@ -118,10 +116,10 @@ describe('Edit books', function () {
                 .search(book_resp.data.name)
                 .startBookEdit(book_resp.data.id);
             books_page = edit_book_page.updateBookInfo(books_payload);
-            books_page.getFlashMessageText((result) => {
+            await books_page.getFlashMessageText((result) => {
                 expect(result.value).to.equal(`Book '${books_payload.name}' was successfully saved`);
             });
-            books_page.search(book_resp.data.name)
+            await books_page.search(book_resp.data.name)
                 .openBookDetails(book_resp.data.id);
             await books_page
                 .section
@@ -152,10 +150,10 @@ describe('Edit books', function () {
                 .search(book_resp.data.name)
                 .startBookEdit(book_resp.data.id);
             books_page = edit_book_page.updateBookInfo(books_payload);
-            books_page.getFlashMessageText((result) => {
+            await books_page.getFlashMessageText((result) => {
                 expect(result.value).to.equal(`Book '${books_payload.name}' was successfully saved`);
             });
-            books_page.search(book_resp.data.name)
+            await books_page.search(book_resp.data.name)
                 .openBookDetails(book_resp.data.id);
             await books_page
                 .section
@@ -185,10 +183,10 @@ describe('Edit books', function () {
                 .search(book_resp.data.name)
                 .startBookEdit(book_resp.data.id);
             books_page = edit_book_page.removeDescription();
-            books_page.getFlashMessageText((result) => {
+            await books_page.getFlashMessageText((result) => {
                 expect(result.value).to.equal(`Book '${books_payload.name}' was successfully saved`);
             });
-            books_page.search(book_resp.data.name)
+            await books_page.search(book_resp.data.name)
                 .openBookDetails(book_resp.data.id);
             await books_page
                 .section
@@ -218,10 +216,10 @@ describe('Edit books', function () {
                 .search(book_resp.data.name)
                 .startBookEdit(book_resp.data.id);
             books_page = edit_book_page.removeCoverLink();
-            books_page.getFlashMessageText((result) => {
+            await books_page.getFlashMessageText((result) => {
                 expect(result.value).to.equal(`Book '${books_payload.name}' was successfully saved`);
             });
-            books_page.search(book_resp.data.name)
+            await books_page.search(book_resp.data.name)
                 .openBookDetails(book_resp.data.id);
             await books_page
                 .section
@@ -255,10 +253,10 @@ describe('Edit books', function () {
                 .search(book_resp.data.name)
                 .startBookEdit(book_resp.data.id);
             books_page = edit_book_page.updateBookInfo(books_payload);
-            books_page.getFlashMessageText((result) => {
+            await books_page.getFlashMessageText((result) => {
                 expect(result.value).to.equal(`Book '${books_payload.name}' was successfully saved`);
             });
-            books_page.search(book_resp.data.name)
+            await books_page.search(book_resp.data.name)
                 .openBookDetails(book_resp.data.id);
             await books_page
                 .section
@@ -293,7 +291,7 @@ describe('Edit books', function () {
                 .search(book_resp.data.name)
                 .startBookEdit(book_resp.data.id);
             books_page = edit_book_page.updateBookInfo(books_payload);
-            books_page.getFlashMessageText((result) => {
+            await books_page.getFlashMessageText((result) => {
                 expect(result.value).to.equal(`Book '${books_payload.name}' was successfully saved`);
             });
             await books_page.search(books_payload.name)

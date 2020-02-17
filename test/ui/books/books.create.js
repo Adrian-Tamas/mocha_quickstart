@@ -22,13 +22,11 @@ describe('Create books', function () {
 
     this.timeout(60000);
     before(async () => {
-        await startWebDriver({env: process.env.NIGHTWATCH_ENV || 'firefox'});
         await createSession({env: process.env.NIGHTWATCH_ENV || 'firefox'});
     });
 
     after(async () => {
         await closeSession();
-        await stopWebDriver();
         for (const entry of created_books) {
             let url = global.backend_url + `/books/${entry}`;
             await api_delete({url: url});
@@ -47,27 +45,27 @@ describe('Create books', function () {
             await books_page.getFlashMessageText((result) => {
                 expect(result.value).to.equal(`Book '${books_payload.name}' was successfully saved`);
             });
+            let book_id;
             await books_page.getBookId(books_payload.name, (result) => {
-                let book_id = result.value;
-                created_books.push(book_id);
-                books_page
-                    .openBookDetails(book_id);
-                books_page
-                    .section
-                    .detailsModal
-                    .getCoverUrl((result) => {
-                        expect(result.value).to.contain(`${books_payload.cover}`);
-                    })
-                    .getBookName((result) => {
-                        expect(result.value).to.contain(`${books_payload.name}`);
-                    })
-                    .getAuthorName((result) => {
-                        expect(result.value).to.contain(`${books_payload.author}`);
-                    })
-                    .getDescription((result) => {
-                        expect(result.value).to.contain(`${books_payload.description}`);
-                    })
-            });
+                book_id = result.value;});
+            created_books.push(book_id);
+            await books_page
+                .openBookDetails(book_id);
+            await books_page
+                .section
+                .detailsModal
+                .getCoverUrl((result) => {
+                    expect(result.value).to.contain(`${books_payload.cover}`);
+                })
+                .getBookName((result) => {
+                    expect(result.value).to.contain(`${books_payload.name}`);
+                })
+                .getAuthorName((result) => {
+                    expect(result.value).to.contain(`${books_payload.author}`);
+                })
+                .getDescription((result) => {
+                    expect(result.value).to.contain(`${books_payload.description}`);
+                });
         });
 
         it('when only the mandatory values are given', async function () {
@@ -81,12 +79,14 @@ describe('Create books', function () {
             await books_page.getFlashMessageText((result) => {
                 expect(result.value).to.equal(`Book '${books_payload.name}' was successfully saved`);
             });
+            let book_id;
             await books_page.getBookId(books_payload.name, (result) => {
-                let book_id = result.value;
+                book_id = result.value
                 created_books.push(book_id);
-                books_page
+            });
+            await books_page
                     .openBookDetails(book_id);
-                books_page
+            await books_page
                     .section
                     .detailsModal
                     .getCoverUrl((result) => {
@@ -100,8 +100,7 @@ describe('Create books', function () {
                     })
                     .getDescription((result) => {
                         expect(result.value).to.contain("No description provided");
-                    })
-            });
+                    });
         });
 
         it('when when adding one for an existing author', async function () {
@@ -119,12 +118,14 @@ describe('Create books', function () {
             await books_page.getFlashMessageText((result) => {
                 expect(result.value).to.equal(`Book '${books_payload.name}' was successfully saved`);
             });
+            let book_id;
             await books_page.getBookId(books_payload.name, (result) => {
-                let book_id = result.value;
+                book_id = result.value;
                 created_books.push(book_id);
-                books_page
+            });
+            await books_page
                     .openBookDetails(book_id);
-                books_page
+            await books_page
                     .section
                     .detailsModal
                     .getCoverUrl((result) => {
@@ -138,8 +139,7 @@ describe('Create books', function () {
                     })
                     .getDescription((result) => {
                         expect(result.value).to.contain(`${books_payload.description}`);
-                    })
-            });
+                    });
         });
 
         describe('dose not create a new book', function () {

@@ -25,8 +25,10 @@ describe('Delete book', function () {
 
     this.timeout(60000);
     before(async () => {
-        await startWebDriver({env: process.env.NIGHTWATCH_ENV || 'firefox'});
         await createSession({env: process.env.NIGHTWATCH_ENV || 'firefox'});
+    });
+
+    beforeEach(async () => {
         let url = global.backend_url + "/books";
         books_payload = book();
         book_resp = await api_post({url: url, payload: books_payload});
@@ -35,7 +37,6 @@ describe('Delete book', function () {
 
     after(async () => {
         await closeSession();
-        await stopWebDriver();
         for (const entry of created_books) {
             let url = global.backend_url + `/books/${entry}`;
             await api_delete({url: url});
