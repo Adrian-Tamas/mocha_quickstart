@@ -3,7 +3,10 @@ This is a quick-start for javascript, mocha, chai and nightwatch-api automation 
 
 # How to use it
 * if you just need a skeleton framework to start writing tests or learning automation create a branch from master and start using the framework
-* if you want to see a demo of how tests can be written and how the framework works change to the demoLibraryApp branch
+* if you want to see a demo of how tests can be written and how the framework works change to the demoLibraryApp branch:
+    * app used for the demo:
+        * backend: https://github.com/Adrian-Tamas/PythonLibraryBackend
+        * frontend: https://github.com/Adrian-Tamas/PythonLibaryFrontend
 
 # About the framework
 * it is currently setup for Rest Api testing and UI testing
