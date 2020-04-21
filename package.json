@@ -1,14 +1,18 @@
 {
   "name": "mocha-quickstart",
   "version": "1.0.0",
-  "description": "",
+  "description": "Quickstart automation framework",
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive --verbose"
   },
   "keywords": [],
-  "author": "",
-  "license": "APACHE2.0",
+  "author": {
+    "name": "Adrian Tamas",
+    "email": "adi.tamas@outlook.com"
+  },
+  "repository": "github:Adrian-Tamas/mocha_quickstart",
+  "license": "Apache-2.0",
   "dependencies": {
     "axios": "^0.19.2",
     "chai": "^4.2.0",
