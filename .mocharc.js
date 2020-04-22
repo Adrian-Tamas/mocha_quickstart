@@ -9,7 +9,7 @@ module.exports = {
     extension: ['js'],
     opts: false,
     package: './package.json',
-    reporter: 'spec',
+    reporter: 'mochawesome',
     slow: 75,
     timeout: 2000,
     'watch-files': ['lib/**/*.js', 'test/**/*.js'],

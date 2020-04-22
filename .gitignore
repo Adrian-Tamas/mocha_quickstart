@@ -4,3 +4,4 @@ selenium-server.log
 tests_output
 .idea
 geckodriver.log
+mochawesome-report
