@@ -22,7 +22,7 @@
     "deasync-promise": "^1.0.1",
     "faker": "^4.1.0",
     "geckodriver": "^1.19.1",
-    "minimist": ">=0.2.1",
+    "minimist": ">=1.2.6",
     "mocha": "^6.2.3",
     "mochawesome": "^6.1.0",
     "nightwatch": "^1.3.4",
